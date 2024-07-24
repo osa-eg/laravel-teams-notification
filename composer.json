@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "name": "osa-eg/laravel-teams-notification",
     "description": "A Laravel package to send notifications to Microsoft Teams",
     "keywords": ["notification", "teams", "logging","teams_logging","teams-workflow","teams-connector", "laravel", "adaptive-card"],
