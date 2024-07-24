@@ -1,0 +1,25 @@
+{
+    "name": "osama/laravel-teams-notification",
+    "description": "A Laravel package to send notifications to Microsoft Teams",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Osama\\LaravelTeamsNotification\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Osama\\LaravelTeamsNotification\\LaravelTeamsNotificationServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Osama Saad",
+            "email": "osaad96eg@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
