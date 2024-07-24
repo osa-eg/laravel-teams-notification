@@ -4,6 +4,10 @@
 ### Added
 - Initial release with basic functionality.
 
-## [1.1.0] - 2024-08-15
+## [1.1.0] - 2024-07-24
 ### Added
-- Added support for PHP 8.1.
+- Added support for PHP versions.
+
+## [1.1.0] - 2024-07-24
+### Added
+- Added tests.
