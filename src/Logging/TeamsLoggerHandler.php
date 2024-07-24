@@ -26,6 +26,6 @@ class TeamsLoggerHandler extends AbstractProcessingHandler
         $message = $record['formatted'] ?? $record['message'];
 
         // Send the message to Teams
-        $this->teamsNotification->sendMessage($message);
+        $this->teamsNotification->setColor(new LoggerColor($record['level_name']))->sendMessage($message, $record['context']);
     }
 }
