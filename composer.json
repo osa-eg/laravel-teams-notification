@@ -1,5 +1,5 @@
 {
-    "name": "osama/laravel-teams-notification",
+    "name": "osa-eg/laravel-teams-notification",
     "description": "A Laravel package to send notifications to Microsoft Teams",
     "type": "library",
     "require": {
