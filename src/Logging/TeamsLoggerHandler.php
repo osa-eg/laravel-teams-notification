@@ -4,6 +4,7 @@ namespace Osama\LaravelTeamsNotification\Logging;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger as MonologLogger;
+use Monolog\LogRecord;
 use Osama\LaravelTeamsNotification\TeamsNotification;
 
 class TeamsLoggerHandler extends AbstractProcessingHandler
@@ -17,15 +18,27 @@ class TeamsLoggerHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param array $record
+     * Handle log record or array.
+     *
+     * @param mixed $record
      * @return void
      */
-    protected function write(array $record)
+    protected function write($record)
     {
-        // Format the log message
-        $message = $record['formatted'] ?? $record['message'];
+        // Check if record is an instance of LogRecord
+        if ($record instanceof LogRecord) {
+            $message = $record->formatted ?? $record->message;
+            $context = $record->context;
+            $levelName = $record->level_name;
+        } else {
+            // Fallback for older versions using array
+            $message = $record['formatted'] ?? $record['message'];
+            $context = $record['context'];
+            $levelName = $record['level_name'];
+        }
 
         // Send the message to Teams
-        $this->teamsNotification->setColor(new LoggerColor($record['level_name']))->sendMessage($message, $record['context']);
+        $this->teamsNotification->setColor(new LoggerColor($levelName))
+            ->sendMessage($message, $context);
     }
 }
