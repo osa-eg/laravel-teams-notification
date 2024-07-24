@@ -5,8 +5,8 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.0",
-        "laravel/framework": "^10.0",
+        "php": ">=8.0",
+        "laravel/framework": ">=10.0",
         "monolog/monolog": "^3.0",
         "guzzlehttp/guzzle": "^7.0"
     },
