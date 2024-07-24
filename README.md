@@ -1,10 +1,38 @@
 # Laravel Teams Notification
 
-Laravel Teams Notification is a package to send notifications to Microsoft Teams using an incoming webhook URL. This package supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks.
+Laravel Teams Notification is a package for sending notifications to Microsoft Teams using an incoming webhook URL. It supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks. The package also includes custom logging functionality for Laravel.
 
 ![Exception Image](assets/images/1.png)
 ![Normal message](assets/images/2.png)
 ![Json message](assets/images/3.png)
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Publishing Files](#publishing-files)
+  - [Config](#config)
+- [Usage](#usage)
+  - [Sending a Normal Message](#sending-a-normal-message)
+  - [Sending a Normal Message with Additional Details and Color](#sending-a-normal-message-with-additional-details-and-color)
+  - [Sending a Success Message](#sending-a-success-message)
+  - [Sending a Warning Message](#sending-a-warning-message)
+  - [Sending an Error Message with Trace and Default Attention Color](#sending-an-error-message-with-trace-and-default-attention-color)
+  - [Sending a Message with Array as JSON Block and Custom Color](#sending-a-message-with-array-as-json-block-and-custom-color)
+- [Custom Logging](#custom-logging)
+- [Methods](#methods)
+- [License](#license)
+
+## Features
+
+- **Send Normal Messages**: Send simple text notifications to Teams.
+- **Send Messages with Additional Details**: Include extra details in the notification.
+- **Send Success Messages**: Highlight successful operations with a green color.
+- **Send Warning Messages**: Indicate warnings with an orange color.
+- **Send Error Messages**: Report errors with a red color and optional stack trace.
+- **Send Messages with JSON Blocks**: Include formatted JSON data in the message.
+- **Custom Logging**: Log messages directly to Microsoft Teams using Laravel’s logging system.
+- **Configurable Message Colors**: Set custom colors for messages with predefined options.
 
 ## Installation
 
@@ -19,16 +47,16 @@ Then, add your Microsoft Teams webhook URL to your `.env` file:
 ```env
 TEAMS_WEBHOOK_URL=your_teams_webhook_url
 ```
+
 ## Publishing Files
+
 ### Config
 
 To publish the config file included with this package to your Laravel project, run:
 
 ```bash
 php artisan vendor:publish --tag=laravel-teams-notification-config
-````
-
-
+```
 
 ## Usage
 
@@ -126,6 +154,35 @@ $data = [
 $notification->success()->sendJsonMessage($message, $data);
 ```
 
+## Custom Logging
+
+The package also supports custom logging to Microsoft Teams. To set up custom logging, follow these steps:
+
+1. **Configure Logging in Your Laravel Project:**
+
+   In `config/logging.php`, add the following configuration:
+
+   ```php
+   'channels' => [
+       // Other channels...
+
+       'teams' => [
+           'driver' => 'custom',
+           'via' => \Osama\LaravelTeamsNotification\Logging\TeamsLogger::class,
+           'webhook_url' => env('TEAMS_WEBHOOK_URL'),
+       ],
+   ],
+   ```
+
+2. **Use the Custom Log Channel:**
+
+   To log messages to Teams, use the `teams` log channel:
+
+   ```php
+   Log::channel('teams')->info('This is an info message');
+   Log::channel('teams')->error('This is an error message');
+   ```
+
 ## Methods
 
 - **setColor(string $color)**: Sets the color of the message. Valid colors are "default", "dark", "light", "accent", "good", "warning", "attention".
@@ -142,4 +199,4 @@ $notification->success()->sendJsonMessage($message, $data);
 This package is open-sourced software licensed under the [MIT license](LICENSE).
 ```
 
-This README file now includes instructions and examples for using the enhanced features of the `TeamsNotification` package, including setting message colors, sending success, warning, and error messages, and sending messages with JSON blocks.
+This README now includes a Table of Contents section that links to different parts of the document for easier navigation.

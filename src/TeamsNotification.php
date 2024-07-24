@@ -18,9 +18,9 @@ class TeamsNotification
         "default", "dark", "light", "accent", "good", "warning", "attention"
     ];
 
-    public function __construct()
+    public function __construct($webhookUrl = null)
     {
-        $this->webhookUrl = env('TEAMS_WEBHOOK_URL');
+        $this->webhookUrl = $webhookUrl ?: config('teams.webhook_url');
     }
 
     // Method to set the color and allow chaining
