@@ -2,9 +2,19 @@
 
 Laravel Teams Notification is a package for sending notifications to Microsoft Teams using an incoming webhook URL. It supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks. The package also includes custom logging functionality for Laravel.
 
-![Exception Image](assets/images/1.png)
-![Normal message](assets/images/2.png)
-![Json message](assets/images/3.png)
+<!-- Full-width image -->
+<p align="center">
+  <img src="assets/images/1.png" alt="Full Width Image" style="width:100%;">
+</p>
+
+<!-- Four images in a row, each 25% width -->
+<p align="center">
+  <img src="assets/images/2.png" alt="Image 2" style="width:24%; display:inline-block;">
+  <img src="assets/images/3.png" alt="Image 3" style="width:24%; display:inline-block;">
+  <img src="assets/images/4.png" alt="Image 4" style="width:24%; display:inline-block;">
+  <img src="assets/images/5.png" alt="Image 5" style="width:24%; display:inline-block;">
+</p>
+
 
 ## Table of Contents
 
