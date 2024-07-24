@@ -1,92 +1,131 @@
-
 # Laravel Teams Notification
 
-**A Laravel package for sending notifications to Microsoft Teams.**
-
-## Overview
-
-The `laravel-teams-notification` package allows you to easily send notifications to Microsoft Teams channels using webhooks. This package integrates with Laravel and provides a simple API for sending adaptive card messages.
-
-## Features
-
-- Send messages to Microsoft Teams channels using adaptive cards.
-- Easy integration with Laravel.
-- Configurable webhook URL via the `.env` file.
+Laravel Teams Notification is a package to send notifications to Microsoft Teams using an incoming webhook URL. This package supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks.
 
 ## Installation
 
-You can install the package using Composer. Run the following command in your Laravel project:
+To install the package, use Composer:
 
 ```bash
 composer require osama/laravel-teams-notification
 ```
 
-## Configuration
+Then, add your Microsoft Teams webhook URL to your `.env` file:
 
-1. **Publish the Configuration File**
-
-   Publish the configuration file to your Laravel application:
-
-   ```bash
-   php artisan vendor:publish --provider="Osama\LaravelTeamsNotification\LaravelTeamsNotificationServiceProvider" --tag=config
-   ```
-
-   This will create a `teams.php` configuration file in your `config` directory.
-
-2. **Set Up the Webhook URL**
-
-   Open your `.env` file and add your Microsoft Teams webhook URL:
-
-   ```dotenv
-   TEAMS_WEBHOOK_URL=https://your-webhook-url
-   ```
+```env
+TEAMS_WEBHOOK_URL=your_teams_webhook_url
+```
 
 ## Usage
 
-To send a notification to Microsoft Teams, use the `TeamsNotification` class. Here's an example of how to use it in a controller:
+### Sending a Normal Message
+
+To send a normal message, use the `sendMessage` method:
 
 ```php
 use Osama\LaravelTeamsNotification\TeamsNotification;
 
-class NotificationController extends Controller
-{
-    public function sendTeamsNotification()
-    {
-        $teamsNotification = new TeamsNotification();
-        $statusCode = $teamsNotification->send('Your message here');
+$notification = new TeamsNotification();
+$message = "System Notification";
+$notification->sendMessage($message);
+```
 
-        return response()->json(['status' => $statusCode]);
-    }
+### Sending a Normal Message with Additional Details and Color
+
+To send a normal message with additional details, use the `sendMessage` method with the second parameter:
+
+```php
+use Osama\LaravelTeamsNotification\TeamsNotification;
+
+$notification = new TeamsNotification();
+$message = "System Notification";
+$details = [
+    'Server' => 'Production',
+    'Status' => 'Running',
+    'Uptime' => '24 days'
+];
+$notification->accent()->sendMessage($message, $details);
+```
+
+### Sending a Success Message
+
+To send a success message, use the `success` method:
+
+```php
+use Osama\LaravelTeamsNotification\TeamsNotification;
+
+$notification = new TeamsNotification();
+$message = "Operation completed successfully!";
+$details = [
+    'Duration' => '2 seconds',
+    'Processed Items' => '150'
+];
+$notification->success()->sendMessage($message, $details);
+```
+
+### Sending a Warning Message
+
+To send a warning message, use the `warning` method:
+
+```php
+use Osama\LaravelTeamsNotification\TeamsNotification;
+
+$notification = new TeamsNotification();
+$message = "Warning: High Memory Usage Detected";
+$details = [
+    'Memory Usage' => '95%',
+    'Server' => 'Production'
+];
+$notification->warning()->sendMessage($message, $details);
+```
+
+### Sending an Error Message with Trace and Default Attention Color
+
+To send an error message with trace, use the `error` method and `bindTrace` method:
+
+```php
+use Osama\LaravelTeamsNotification\TeamsNotification;
+
+try {
+    // Code that may throw an exception
+} catch (\Exception $exception) {
+    $notification = new TeamsNotification();
+    $notification->bindTrace()->error()->sendException($exception);
 }
 ```
 
-## Configuration Options
+### Sending a Message with Array as JSON Block and Custom Color
 
-- **webhook_url**: The webhook URL for your Microsoft Teams channel. Set this in your `.env` file as `TEAMS_WEBHOOK_URL`.
+To send a message with an array as a JSON block, use the `sendJsonMessage` method:
 
-## Contributing
+```php
+use Osama\LaravelTeamsNotification\TeamsNotification;
 
-Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) for more information on how you can help improve this package.
+$notification = new TeamsNotification();
+$message = "Data Update";
+$data = [
+    'user_id' => 12345,
+    'action' => 'update',
+    'status' => 'success',
+    'timestamp' => date('Y-m-d H:i:s')
+];
+$notification->success()->sendJsonMessage($message, $data);
+```
+
+## Methods
+
+- **setColor(string $color)**: Sets the color of the message. Valid colors are "default", "dark", "light", "accent", "good", "warning", "attention".
+- **success()**: Sets the message color to "good".
+- **warning()**: Sets the message color to "warning".
+- **error()**: Sets the message color to "attention".
+- **sendMessage($message, array $details = [])**: Sends a normal message with additional details.
+- **sendException(\Exception $exception)**: Sends an exception message with optional trace details.
+- **bindTrace()**: Includes the trace in the exception message.
+- **sendJsonMessage($message, array $data)**: Sends a message with an array as a JSON block.
 
 ## License
 
-This package is licensed under the [MIT License](LICENSE).
-
-## Contact
-
-For questions, issues, or feature requests, please open an issue on the [GitHub repository](https://github.com/your-username/laravel-teams-notification) or contact me directly.
-
-## Changelog
-
-Check out the [CHANGELOG](CHANGELOG.md) for a list of changes and updates.
-
-## Credits
-
-- [Osama](https://github.com/your-username) - Creator and maintainer
-- [Laravel](https://laravel.com) - The PHP framework used
-- [Microsoft Teams](https://docs.microsoft.com/en-us/microsoftteams/platform/) - Notification platform
+This package is open-sourced software licensed under the [MIT license](LICENSE).
 ```
 
-Replace placeholders like `https://your-webhook-url` and `https://github.com/your-username/laravel-teams-notification` with the actual values relevant to your package.
-
-Feel free to adjust or add any additional sections as needed.
+This README file now includes instructions and examples for using the enhanced features of the `TeamsNotification` package, including setting message colors, sending success, warning, and error messages, and sending messages with JSON blocks.
