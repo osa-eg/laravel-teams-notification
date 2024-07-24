@@ -15,6 +15,24 @@ Then, add your Microsoft Teams webhook URL to your `.env` file:
 ```env
 TEAMS_WEBHOOK_URL=your_teams_webhook_url
 ```
+## Publishing Files
+### Config
+
+To publish the config file included with this package to your Laravel project, run:
+
+```bash
+php artisan vendor:publish --tag=laravel-teams-notification-config
+````
+
+
+### Tests
+
+To publish the tests included with this package to your Laravel project, run:
+
+```bash
+php artisan vendor:publish --tag=laravel-teams-notification-tests
+````
+
 
 ## Usage
 
