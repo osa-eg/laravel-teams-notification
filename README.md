@@ -2,6 +2,10 @@
 
 Laravel Teams Notification is a package to send notifications to Microsoft Teams using an incoming webhook URL. This package supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks.
 
+![Exception Image](assets/images/1.png)
+![Normal message](assets/images/2.png)
+![Json message](assets/images/3.png)
+
 ## Installation
 
 To install the package, use Composer:
@@ -62,7 +66,7 @@ $details = [
     'Status' => 'Running',
     'Uptime' => '24 days'
 ];
-$notification->accent()->sendMessage($message, $details);
+$notification->sendMessage($message, $details);
 ```
 
 ### Sending a Success Message
