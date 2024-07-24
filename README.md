@@ -29,14 +29,6 @@ php artisan vendor:publish --tag=laravel-teams-notification-config
 ````
 
 
-### Tests
-
-To publish the tests included with this package to your Laravel project, run:
-
-```bash
-php artisan vendor:publish --tag=laravel-teams-notification-tests
-````
-
 
 ## Usage
 
