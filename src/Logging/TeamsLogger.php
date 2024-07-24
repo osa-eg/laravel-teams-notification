@@ -1,5 +1,4 @@
 <?php
-
 namespace Osama\LaravelTeamsNotification\Logging;
 
 use Osama\LaravelTeamsNotification\TeamsNotification;
@@ -9,11 +8,12 @@ class TeamsLogger
     protected $webhookUrl;
 
     /**
-     * @param $webhookUrl
+     * Constructor is removed to allow Laravel to instantiate the class without parameters.
      */
-    public function __construct($webhookUrl)
+    public function __construct()
     {
-        $this->webhookUrl = $webhookUrl;
+        // Retrieve the webhook URL from configuration
+        $this->webhookUrl = config('logging.channels.teams.webhook_url');
     }
 
     /**
