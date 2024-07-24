@@ -27,8 +27,5 @@ class LaravelTeamsNotificationServiceProvider extends ServiceProvider
             __DIR__.'/../config/teams.php', 'teams'
         );
 
-        $this->commands([
-            PublishTests::class,
-        ]);
     }
 }
