@@ -7,7 +7,7 @@ Laravel Teams Notification is a package to send notifications to Microsoft Teams
 To install the package, use Composer:
 
 ```bash
-composer require osama/laravel-teams-notification
+composer require osa-eg/laravel-teams-notification
 ```
 
 Then, add your Microsoft Teams webhook URL to your `.env` file:
