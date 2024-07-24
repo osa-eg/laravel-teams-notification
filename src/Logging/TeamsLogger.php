@@ -2,29 +2,15 @@
 
 namespace Osama\LaravelTeamsNotification\Logging;
 
-use Osama\LaravelTeamsNotification\TeamsNotification;
+use Monolog\Logger as MonologLogger;
 
-class TeamsLogger
+class TeamsLogger extends MonologLogger
 {
-    protected $webhookUrl;
 
-    /**
-     * @param $webhookUrl
-     */
-    public function __construct($webhookUrl)
+    public function __construct(string $url)
     {
-        $this->webhookUrl = $webhookUrl;
-    }
-
-    /**
-     * @param array $config
-     * @return TeamsLoggerHandler
-     */
-    public function __invoke(array $config)
-    {
-        return new TeamsLoggerHandler(
-            new TeamsNotification($this->webhookUrl),
-            $config['level'] ?? \Monolog\Logger::DEBUG
-        );
+        parent::__construct('teams-logger',[
+            new TeamsLoggerHandler($url)
+        ]);
     }
 }

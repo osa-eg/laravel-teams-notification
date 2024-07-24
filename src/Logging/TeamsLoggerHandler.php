@@ -2,19 +2,31 @@
 
 namespace Osama\LaravelTeamsNotification\Logging;
 
+use App\Models\User;
+use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger as MonologLogger;
 use Monolog\LogRecord;
 use Osama\LaravelTeamsNotification\TeamsNotification;
 
 class TeamsLoggerHandler extends AbstractProcessingHandler
 {
-    protected $teamsNotification;
 
-    public function __construct(TeamsNotification $teamsNotification, $level = MonologLogger::DEBUG, bool $bubble = true)
+    public $url;
+
+    public function __construct($url, $level = Logger::DEBUG)
     {
-        parent::__construct($level, $bubble);
-        $this->teamsNotification = $teamsNotification;
+        parent::__construct($level);
+        $this->teamsNotification = new TeamsNotification($url);
+    }
+
+    /**
+     * @param array $record
+     *
+     * @return array|void
+     */
+    protected function getMessage(array $record)
+    {
+        return $this->getStringLoggerMessage($record);
     }
 
     /**
@@ -23,9 +35,11 @@ class TeamsLoggerHandler extends AbstractProcessingHandler
      */
     protected function write(LogRecord $record): void
     {
-        $message = $record->formatted ?? $record->message;
-        $context = $record->context;
-        $levelName = $record->level_name;
+        $data = $record->toArray();
+
+        $message = $data['message'];
+        $context = $data['context'];
+        $levelName = $data['level_name'];
 
         $this->teamsNotification->setColor(new LoggerColor($levelName))
             ->sendMessage($message, $context);

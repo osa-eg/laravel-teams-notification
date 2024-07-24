@@ -12,6 +12,11 @@
 - **Custom Logging**: Log messages directly to Microsoft Teams using Laravel’s logging system.
 - **Configurable Message Colors**: Set custom colors for messages with predefined options.
 
-## [1.0.0] - 2024-07-24
+## [2.0.0] - 2024-07-24
 ### Added
 Minimum php = v8 and at least laravel 10
+
+## [2.1.0] - 2024-07-24
+### Fixed
+Fixed an issue in logging to teams
+
