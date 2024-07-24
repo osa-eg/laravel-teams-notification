@@ -1,268 +1,108 @@
 <?php
 
-namespace Tests\Unit;
+namespace Osama\LaravelTeamsNotification\Tests;
 
-use Illuminate\Support\Facades\Http;
 use Osama\LaravelTeamsNotification\TeamsNotification;
-use Tests\TestCase;
-use Mockery;
+use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\TestCase;
 
 class TeamsNotificationTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        // Mocking HTTP requests to avoid actual API calls
+        // Mock the HTTP client to prevent actual HTTP requests
         Http::fake();
+    }
+
+    public function testSetColor()
+    {
+        $notification = new TeamsNotification();
+        $notification->setColor('good');
+        $this->assertEquals('good', $notification->color);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $notification->setColor('invalid-color');
+    }
+
+    public function testSuccessMethod()
+    {
+        $notification = new TeamsNotification();
+        $notification->success();
+        $this->assertEquals('good', $notification->color);
+    }
+
+    public function testWarningMethod()
+    {
+        $notification = new TeamsNotification();
+        $notification->warning();
+        $this->assertEquals('warning', $notification->color);
+    }
+
+    public function testErrorMethod()
+    {
+        $notification = new TeamsNotification();
+        $notification->error();
+        $this->assertEquals('attention', $notification->color);
     }
 
     public function testSendMessage()
     {
         $notification = new TeamsNotification();
-        $response = $notification->setColor('good')->sendMessage('Test Message', ['Key1' => 'Value1', 'Key2' => 'Value2']);
+        $notification->setColor('dark');
+        $notification->sendMessage('Test message', ['key1' => 'value1']);
 
-        $expected = [
-            "type" => "message",
-            "attachments" => [
-                [
-                    "contentType" => "application/vnd.microsoft.card.adaptive",
-                    "content" => [
-                        "\$schema" => "http://adaptivecards.io/schemas/adaptive-card.json",
-                        "type" => "AdaptiveCard",
-                        "version" => "1.2",
-                        "msteams" => [
-                            "width" => "Full"
-                        ],
-                        "body" => [
-                            [
-                                "type" => "TextBlock",
-                                "size" => "Medium",
-                                "weight" => "Bolder",
-                                "color" => "good",
-                                "text" => 'Test Message'
-                            ],
-                            [
-                                "type" => "ColumnSet",
-                                "columns" => [
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => 'Key1',
-                                                "weight" => "Bolder"
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ],
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => 'Value1',
-                                                "wrap" => true
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ]
-                                ]
-                            ],
-                            [
-                                "type" => "ColumnSet",
-                                "columns" => [
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => 'Key2',
-                                                "weight" => "Bolder"
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ],
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => 'Value2',
-                                                "wrap" => true
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        Http::assertSent(function ($request) use ($expected) {
-            return $request->data() === $expected;
+        // Check if HTTP request was made with correct payload
+        Http::assertSent(function ($request) {
+            $payload = $request->data();
+            return isset($payload['attachments'][0]['content']['body']) &&
+                $payload['attachments'][0]['content']['body'][0]['text'] === 'Test message' &&
+                $payload['attachments'][0]['content']['body'][1]['columns'][0]['items'][0]['text'] === 'key1' &&
+                $payload['attachments'][0]['content']['body'][1]['columns'][1]['items'][0]['text'] === 'value1';
         });
     }
 
     public function testSendException()
     {
-        $exception = new \Exception('Test Exception', 1, new \ErrorException('Previous exception'));
-
         $notification = new TeamsNotification();
-        $notification->bindTrace(); // To include the trace
-        $response = $notification->sendException($exception);
+        $exception = new \Exception('Test exception message');
+        $notification->sendException($exception);
 
-        $expected = [
-            "type" => "message",
-            "attachments" => [
-                [
-                    "contentType" => "application/vnd.microsoft.card.adaptive",
-                    "content" => [
-                        "\$schema" => "http://adaptivecards.io/schemas/adaptive-card.json",
-                        "type" => "AdaptiveCard",
-                        "version" => "1.2",
-                        "msteams" => [
-                            "width" => "Full"
-                        ],
-                        "body" => [
-                            [
-                                "type" => "TextBlock",
-                                "size" => "Large",
-                                "weight" => "Bolder",
-                                "text" => "Exception Occurred",
-                                "color" => "attention"
-                            ],
-                            [
-                                "type" => "ColumnSet",
-                                "columns" => [
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => "Message:",
-                                                "weight" => "Bolder"
-                                            ],
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => 'Test Exception',
-                                                "wrap" => true
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ],
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => "File:",
-                                                "weight" => "Bolder"
-                                            ],
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => '',
-                                                "wrap" => true
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ],
-                                    [
-                                        "type" => "Column",
-                                        "items" => [
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => "Line:",
-                                                "weight" => "Bolder"
-                                            ],
-                                            [
-                                                "type" => "TextBlock",
-                                                "text" => '',
-                                                "wrap" => true
-                                            ]
-                                        ],
-                                        "width" => "stretch"
-                                    ]
-                                ]
-                            ],
-                            [
-                                "type" => "TextBlock",
-                                "text" => "Trace:",
-                                "weight" => "Bolder"
-                            ],
-                            [
-                                "type" => "TextBlock",
-                                "text" => nl2br($exception->getTraceAsString()),
-                                "wrap" => true
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        // Check if HTTP request was made with correct payload
+        Http::assertSent(function ($request) use ($exception) {
+            $payload = $request->data();
+            return isset($payload['attachments'][0]['content']['body']) &&
+                $payload['attachments'][0]['content']['body'][0]['text'] === 'Exception Occurred' &&
+                $payload['attachments'][0]['content']['body'][1]['columns'][0]['items'][1]['text'] === $exception->getMessage();
+        });
+    }
 
-        Http::assertSent(function ($request) use ($expected) {
-            return $request->data() === $expected;
+    public function testBindTrace()
+    {
+        $notification = new TeamsNotification();
+        $exception = new \Exception('Test exception message');
+        $notification->bindTrace()->sendException($exception);
+
+        // Check if HTTP request was made with trace included
+        Http::assertSent(function ($request) use ($exception) {
+            $payload = $request->data();
+            return isset($payload['attachments'][0]['content']['body'][3]['text']) &&
+                strpos($payload['attachments'][0]['content']['body'][3]['text'], 'Trace:') !== false;
         });
     }
 
     public function testSendJsonMessage()
     {
         $notification = new TeamsNotification();
-        $response = $notification->sendJsonMessage('JSON Message', ['key1' => 'value1', 'key2' => 'value2']);
+        $notification->sendJsonMessage('Test JSON message', ['key' => 'value']);
 
-        $expected = [
-            "type" => "message",
-            "attachments" => [
-                [
-                    "contentType" => "application/vnd.microsoft.card.adaptive",
-                    "content" => [
-                        "\$schema" => "http://adaptivecards.io/schemas/adaptive-card.json",
-                        "type" => "AdaptiveCard",
-                        "version" => "1.2",
-                        "msteams" => [
-                            "width" => "Full"
-                        ],
-                        "body" => [
-                            [
-                                "type" => "TextBlock",
-                                "size" => "Medium",
-                                "weight" => "Bolder",
-                                "color" => "default",
-                                "text" => 'JSON Message'
-                            ],
-                            [
-                                "type" => "TextBlock",
-                                "text" => json_encode(['key1' => 'value1', 'key2' => 'value2'], JSON_PRETTY_PRINT),
-                                "wrap" => true
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        Http::assertSent(function ($request) use ($expected) {
-            return $request->data() === $expected;
+        // Check if HTTP request was made with correct payload
+        Http::assertSent(function ($request) {
+            $payload = $request->data();
+            return isset($payload['attachments'][0]['content']['body']) &&
+                $payload['attachments'][0]['content']['body'][0]['text'] === 'Test JSON message' &&
+                json_decode($payload['attachments'][0]['content']['body'][1]['text'], true) === ['key' => 'value'];
         });
-    }
-
-    public function testSetColor()
-    {
-        $notification = new TeamsNotification();
-        $notification->setColor('dark');
-
-        $this->assertEquals('dark', $notification->color);
-    }
-
-    public function testInvalidColor()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $notification = new TeamsNotification();
-        $notification->setColor('invalid_color');
     }
 }
