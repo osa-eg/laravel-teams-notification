@@ -11,7 +11,7 @@ class LaravelTeamsNotificationServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../tests' => base_path('tests/laravel-teams-notification'),
+            __DIR__ . '/../tests' => base_path('tests/Feature'),
         ], 'laravel-teams-notification-tests');
 
         // Publishing configuration files
