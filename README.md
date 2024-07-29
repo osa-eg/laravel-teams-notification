@@ -41,6 +41,7 @@ Laravel Teams Notification is a package for sending notifications to Microsoft T
 - **Send Warning Messages**: Indicate warnings with an orange color.
 - **Send Error Messages**: Report errors with a red color and optional stack trace.
 - **Send Messages with JSON Blocks**: Include formatted JSON data in the message.
+- **Custom Logging**: Log messages directly to Microsoft Teams using Laravel’s logging system.
 - **Configurable Message Colors**: Set custom colors for messages with predefined options.
 
 ## Installation
@@ -164,6 +165,33 @@ $data = [
 $notification->success()->sendJsonMessage($message, $data);
 ```
 
+## Custom Logging
+
+The package also supports custom logging to Microsoft Teams. To set up custom logging, follow these steps:
+
+1. **Configure Logging in Your Laravel Project:**
+
+   In `config/logging.php`, add the following configuration:
+
+   ```php
+   'channels' => [
+       // Other channels...
+
+       'teams' => [
+           'driver' => 'custom',
+            'via' => \Osama\LaravelTeamsNotification\Logging\TeamsLoggingChannel::class,
+            'webhook_url' => env('TEAMS_WEBHOOK_URL'),
+        ],
+   ```
+
+2. **Use the Custom Log Channel:**
+
+   To log messages to Teams, use the `teams` log channel:
+
+   ```php
+   Log::channel('teams')->info('This is an info message');
+   Log::channel('teams')->error('This is an error message');
+   ```
 
 ## Methods
 
