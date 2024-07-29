@@ -24,6 +24,7 @@ Laravel Teams Notification is a package for sending notifications to Microsoft T
   - [Sending a Message with Array as JSON Block and Custom Color](#sending-a-message-with-array-as-json-block-and-custom-color)
 - [Custom Logging](#custom-logging)
 - [Methods](#methods)
+- [Learn More](#Learn-More)
 - [License](#license)
 
 ## Features
@@ -196,6 +197,13 @@ The package also supports custom logging to Microsoft Teams. To set up custom lo
 - **sendException(\Exception $exception)**: Sends an exception message with optional trace details.
 - **bindTrace()**: Includes the trace in the exception message.
 - **sendJsonMessage($message, array $data)**: Sends a message with an array as a JSON block.
+
+## Learn More
+
+For a detailed guide on integrating Microsoft Teams notifications with your Laravel application, check out my Medium article:
+
+[Streamlining Laravel Notifications with Microsoft Teams Workflow Integration](https://medium.com/@osama.96.eg/streamlining-laravel-notifications-with-microsoft-teams-workflow-integration-99b0e52cafe4)
+
 
 ## License
 
