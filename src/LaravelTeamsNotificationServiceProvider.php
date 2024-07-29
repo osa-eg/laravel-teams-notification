@@ -3,25 +3,32 @@
 namespace Osama\LaravelTeamsNotification;
 
 use Illuminate\Support\ServiceProvider;
-use Osama\LaravelTeamsNotification\Console\Commands\PublishTests;
 
 class LaravelTeamsNotificationServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // Merge the package's configuration file with the application's configuration
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/teams.php', 'teams'
+        );
+    }
 
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
     public function boot()
     {
-        // Publishing configuration files
+        // Publish the package's configuration file
         $this->publishes([
             __DIR__ . '/../config/teams.php' => config_path('teams.php'),
         ], 'laravel-teams-notification-config');
-    }
-
-    public function register()
-    {
-        // Merge config file
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/teams.php', 'teams'
-        );
-
     }
 }

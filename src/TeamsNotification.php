@@ -2,8 +2,9 @@
 
 namespace Osama\LaravelTeamsNotification;
 
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 use InvalidArgumentException;
+use RuntimeException;
 
 class TeamsNotification
 {
@@ -18,9 +19,12 @@ class TeamsNotification
         "default", "dark", "light", "accent", "good", "warning", "attention"
     ];
 
+    protected $client;
+
     public function __construct($webhookUrl = null)
     {
         $this->webhookUrl = $webhookUrl ?: config('teams.webhook_url');
+        $this->client = new Client(); // Initialize Guzzle client
     }
 
     // Method to set the color and allow chaining
@@ -287,6 +291,14 @@ class TeamsNotification
     // Method to send the constructed adaptive card message to Teams
     protected function sendToTeams(array $card)
     {
-        return Http::post($this->webhookUrl, $card);
+        try {
+            $response = $this->client->post($this->webhookUrl, [
+                'json' => $card
+            ]);
+            return $response->getStatusCode(); // Return the HTTP status code
+        } catch (\Exception $e) {
+            // Handle the exception, e.g., log it or rethrow it
+            throw new RuntimeException('Failed to send message to Teams: ' . $e->getMessage());
+        }
     }
 }
