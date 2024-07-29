@@ -4,16 +4,9 @@ Laravel Teams Notification is a package for sending notifications to Microsoft T
 
 <!-- Full-width image -->
 <p align="center">
-  <img src="assets/images/1.png" alt="Full Width Image" style="width:100%;">
+  <img src="assets/images/1.jpg" alt="Image 2" style="width:100%;">
 </p>
 
-<!-- Four images in a row, each 25% width -->
-<p align="center">
-  <img src="assets/images/2.png" alt="Image 2" style="width:49%; height: 100px; display:inline-block;">
-  <img src="assets/images/3.png" alt="Image 3" style="width:49%; height: 100px; display:inline-block;">
-  <img src="assets/images/4.png" alt="Image 4" style="width:49%; height: 100px; display:inline-block;">
-  <img src="assets/images/5.png" alt="Image 5" style="width:49%; height: 100px; display:inline-block;">
-</p>
 
 
 ## Table of Contents
