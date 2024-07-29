@@ -1,6 +1,6 @@
 # Laravel Teams Notification
 
-Laravel Teams Notification is a package for sending notifications to Microsoft Teams using an incoming webhook URL. It supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks. The package also includes custom logging functionality for Laravel.
+Laravel Teams Notification is a package for sending notifications to Microsoft Teams using the "Post to a channel when a webhook request is received" workflow webhook. It supports sending normal messages, exception messages with trace, and messages with additional details or JSON blocks, following the JSON structure required by Microsoft Teams adaptive cards. The package also includes custom logging functionality for Laravel, making it easy to integrate with your existing Laravel applications and log important events directly to Microsoft Teams channels.
 
 <!-- Full-width image -->
 <p align="center">
