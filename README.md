@@ -46,7 +46,7 @@ Laravel Teams Notification is a package for sending notifications to Microsoft T
 
 ## Installation
 
-To install the package, you need (php >= 8.0) and (Laravel >= 10)  use Composer:
+To install the package, you need PHP 7.0 or higher and Laravel 5.5 or later. Use Composer:
 
 ```bash
 composer require osa-eg/laravel-teams-notification
