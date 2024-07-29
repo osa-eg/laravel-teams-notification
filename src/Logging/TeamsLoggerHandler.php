@@ -30,12 +30,13 @@ class TeamsLoggerHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param LogRecord $record
+     * @param array|LogRecord $record
      * @return void
      */
-    protected function write(LogRecord $record): void
+    protected function write($record): void
     {
-        $data = $record->toArray();
+
+        $data = is_array($record)? $record : $record->toArray();
 
         $message = $data['message'];
         $context = $data['context'];
