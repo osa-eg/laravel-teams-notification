@@ -1,9 +1,8 @@
 <?php
 
 namespace Osama\LaravelTeamsNotification\Logging;
-
 use Monolog\Logger as MonologLogger;
-
+use Osama\LaravelTeamsNotification\Exceptions\WebhookUrlIsNotDiscovered;
 class TeamsLoggingChannel
 {
     /**
