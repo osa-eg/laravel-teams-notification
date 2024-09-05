@@ -13,6 +13,8 @@ class TeamsLoggerHandler extends AbstractProcessingHandler
 
     public $url;
 
+    protected $teamsNotification;
+
     public function __construct($url, $level = Logger::DEBUG)
     {
         parent::__construct($level);
