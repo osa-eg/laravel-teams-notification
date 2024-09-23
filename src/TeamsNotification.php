@@ -123,7 +123,7 @@ class TeamsNotification
                             "items" => [
                                 [
                                     "type" => "TextBlock",
-                                    "text" => $value,
+                                    "text" => is_array($value)?json_encode($value,JSON_PRETTY_PRINT):$value,
                                     "wrap" => true
                                 ]
                             ],
