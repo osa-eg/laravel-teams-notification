@@ -158,7 +158,7 @@ class TeamsNotification
     private function formatValue($value): string
     {
         if (is_array($value) || is_object($value)) {
-            json_encode((array) $value, JSON_PRETTY_PRINT);
+            return json_encode((array) $value, JSON_PRETTY_PRINT);
         }
 
         return (string) $value;
